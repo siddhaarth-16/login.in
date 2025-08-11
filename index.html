@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Messho Login & Register</title>
+<title>MESSHO - Login & Register</title>
 <style>
     * {
         background-color: whitesmoke;
         font-family: Arial, sans-serif;
+        box-sizing: border-box;
     }
     .title {
         color: black;
@@ -61,41 +62,39 @@
 
 <h1 class="title">MESSHO</h1>
 
-<!-- Login Form -->
+<!-- LOGIN FORM -->
 <div class="container" id="login-form">
     <h2 style="background:transparent;">Login</h2>
     <input type="email" id="loginEmail" placeholder="Email" required>
     <input type="password" id="loginPassword" placeholder="Password" required>
-    <button onclick="login()">Login</button>
+    <button onclick="loginUser()">Login</button>
     <p>Don't have an account? <a onclick="showRegister()">Register here</a></p>
 </div>
 
-<!-- Register Form -->
+<!-- REGISTER FORM -->
 <div class="container" id="register-form" style="display:none;">
     <h2 style="background:transparent;">Register</h2>
     <input type="email" id="regEmail" placeholder="Email" required>
     <input type="password" id="regPassword" placeholder="Password" required>
     <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required>
-    <button onclick="register()">Register</button>
+    <button onclick="registerUser()">Register</button>
     <p>Already have an account? <a onclick="showLogin()">Login here</a></p>
 </div>
 
 <script>
-    // Show Register Form
+    // Switch forms
     function showRegister() {
         document.getElementById("login-form").style.display = "none";
         document.getElementById("register-form").style.display = "block";
     }
-
-    // Show Login Form
     function showLogin() {
         document.getElementById("login-form").style.display = "block";
         document.getElementById("register-form").style.display = "none";
     }
 
-    // Register User
-    function register() {
-        let email = document.getElementById("regEmail").value;
+    // Register
+    function registerUser() {
+        let email = document.getElementById("regEmail").value.trim();
         let password = document.getElementById("regPassword").value;
         let confirmPassword = document.getElementById("regConfirmPassword").value;
 
@@ -103,42 +102,45 @@
             alert("Please fill all fields.");
             return;
         }
-
         if (password !== confirmPassword) {
             alert("Passwords do not match!");
             return;
         }
-
         if (localStorage.getItem(email)) {
             alert("User already exists. Please login.");
+            showLogin();
             return;
         }
-
         localStorage.setItem(email, password);
         alert("Registration successful! Now login.");
         showLogin();
     }
 
-    // Login User
-    function login() {
-        let email = document.getElementById("loginEmail").value;
+    // Login
+    function loginUser() {
+        let email = document.getElementById("loginEmail").value.trim();
         let password = document.getElementById("loginPassword").value;
 
         if (!email || !password) {
             alert("Please fill all fields.");
             return;
         }
-
+        
         let storedPassword = localStorage.getItem(email);
         if (storedPassword === null) {
             alert("User not found. Please register.");
         } else if (storedPassword === password) {
             alert("Login successful!");
-            // Redirect or show dashboard
-            document.body.innerHTML = <h1 style='text-align:center; background-color:lightgreen;'>Welcome, ${email} 🎉</h1>;
+            document.body.innerHTML = `<h1 style='text-align:center; background-color:lightgreen;'>Welcome, ${email} 🎉</h1>
+                                       <button onclick="logout()" style='display:block;margin:20px auto;'>Logout</button>`;
         } else {
             alert("Incorrect password!");
         }
+    }
+
+    // Logout
+    function logout() {
+        location.reload();
     }
 </script>
 
