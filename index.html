@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messho Login & Register</title>
+<style>
+    * {
+        background-color: whitesmoke;
+        font-family: Arial, sans-serif;
+    }
+    .title {
+        color: black;
+        background-color: pink;
+        margin: 0;
+        padding: 15px;
+        text-align: center;
+    }
+    .container {
+        background-color: pink;
+        width: 40%;
+        padding: 30px;
+        border-radius: 10px;
+        margin: 50px auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    input {
+        width: 100%;
+        margin: 5px 0;
+        padding: 10px;
+        border: 1px solid gray;
+        border-radius: 5px;
+        background-color: white;
+    }
+    button {
+        background-color: black;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+    }
+    button:hover {
+        background-color: gray;
+    }
+    p {
+        background: transparent;
+        text-align: center;
+        margin-top: 10px;
+    }
+    a {
+        background: transparent;
+        color: blue;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<h1 class="title">MESSHO</h1>
+
+<!-- Login Form -->
+<div class="container" id="login-form">
+    <h2 style="background:transparent;">Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email" required>
+    <input type="password" id="loginPassword" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+    <p>Don't have an account? <a onclick="showRegister()">Register here</a></p>
+</div>
+
+<!-- Register Form -->
+<div class="container" id="register-form" style="display:none;">
+    <h2 style="background:transparent;">Register</h2>
+    <input type="email" id="regEmail" placeholder="Email" required>
+    <input type="password" id="regPassword" placeholder="Password" required>
+    <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required>
+    <button onclick="register()">Register</button>
+    <p>Already have an account? <a onclick="showLogin()">Login here</a></p>
+</div>
+
+<script>
+    // Show Register Form
+    function showRegister() {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("register-form").style.display = "block";
+    }
+
+    // Show Login Form
+    function showLogin() {
+        document.getElementById("login-form").style.display = "block";
+        document.getElementById("register-form").style.display = "none";
+    }
+
+    // Register User
+    function register() {
+        let email = document.getElementById("regEmail").value;
+        let password = document.getElementById("regPassword").value;
+        let confirmPassword = document.getElementById("regConfirmPassword").value;
+
+        if (!email || !password || !confirmPassword) {
+            alert("Please fill all fields.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+        if (localStorage.getItem(email)) {
+            alert("User already exists. Please login.");
+            return;
+        }
+
+        localStorage.setItem(email, password);
+        alert("Registration successful! Now login.");
+        showLogin();
+    }
+
+    // Login User
+    function login() {
+        let email = document.getElementById("loginEmail").value;
+        let password = document.getElementById("loginPassword").value;
+
+        if (!email || !password) {
+            alert("Please fill all fields.");
+            return;
+        }
+
+        let storedPassword = localStorage.getItem(email);
+        if (storedPassword === null) {
+            alert("User not found. Please register.");
+        } else if (storedPassword === password) {
+            alert("Login successful!");
+            // Redirect or show dashboard
+            document.body.innerHTML = <h1 style='text-align:center; background-color:lightgreen;'>Welcome, ${email} 🎉</h1>;
+        } else {
+            alert("Incorrect password!");
+        }
+    }
+</script>
+
+</body>
+</html>
